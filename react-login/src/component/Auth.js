@@ -1,12 +1,31 @@
 
 import React, { useState } from "react"
 
-export default function Auth(props) {
+export default function (props) {
   let [authMode, setAuthMode] = useState("signin")
 
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
   }
+    const [userName, setUserName] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+    const[students,setStudents] = React.useState([])
+
+    const handleClick=(e)=>{
+      e.preventDefault()
+      const student={userName: userName, email: email, password: password}
+      console.log(student)
+      fetch("http://localhost:8080/student/add", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(student)
+      }).then(()=>{
+      console.log("New Student added")
+      })
+  }
+
+  
 
   if (authMode === "signin") {
     return (
@@ -67,7 +86,9 @@ export default function Auth(props) {
               type="email"
               className="form-control mt-1"
               placeholder="e.g Jane Doe"
-            />
+              value={userName}
+              onChange={(e)=>setUserName(e.target.value)}
+        />
           </div>
           <div className="form-group mt-3">
             <label>Email address</label>
@@ -75,7 +96,9 @@ export default function Auth(props) {
               type="email"
               className="form-control mt-1"
               placeholder="Email Address"
-            />
+              value={email}
+        onChange={(e)=>setEmail(e.target.value)}
+        />
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
@@ -83,10 +106,12 @@ export default function Auth(props) {
               type="password"
               className="form-control mt-1"
               placeholder="Password"
-            />
+              value = {password}
+        onChange={(e)=>setPassword(e.target.value)}
+        />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" onClick={handleClick} >
               Submit
             </button>
           </div>
